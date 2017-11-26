@@ -3,6 +3,8 @@
 #include <vector>
 #include <cstdint>
 
+#include "include/song.hpp"
+
 void displayUsage()
 {
     std::cout << "TODO: Document usage." << std::endl;
@@ -18,7 +20,6 @@ int main(int argc, char** argv)
 
     // If we do, look for the file and write it into a buffer.
     std::ifstream file(argv[1]);
-    std::cout << argv[1] << std::endl;
     
     if (!file.is_open())
     {
@@ -30,9 +31,15 @@ int main(int argc, char** argv)
     std::vector<int8_t> songData(
             (std::istreambuf_iterator<char>(file)),
             (std::istreambuf_iterator<char>()));
+    
+    // From now on, we just work from the buffer.
+    file.close();
 
     // Construct a new song object from this data.
-    //Song song(songData);
+    Song song(songData);
+
+    std::cout << "Now playing: " << song.name() << std::endl;
+    std::cout << song.description() << std::endl;
     
     return 0;
 }
