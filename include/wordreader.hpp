@@ -13,7 +13,7 @@ namespace wordreader
 
 
     template <typename T>
-    T readword(uint8_t first, uint8_t second, endian_t type  = BIG_ENDIAN)
+    T readword(uint8_t first, uint8_t second, endian_t type  = BIG)
     {
         if (type == BIG)
         {
