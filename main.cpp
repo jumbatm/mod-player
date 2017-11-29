@@ -28,7 +28,7 @@ int main(int argc, char** argv)
     }
 
     // Read the data into a byte-sized vector.
-    std::vector<int8_t> songData(
+    std::vector<uint8_t> songData(
             (std::istreambuf_iterator<char>(file)),
             (std::istreambuf_iterator<char>()));
     
@@ -39,7 +39,6 @@ int main(int argc, char** argv)
     Song song(songData);
 
     std::cout << "Now playing: " << song.name() << std::endl;
-    std::cout << song.description() << std::endl;
     
     return 0;
 }
