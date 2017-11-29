@@ -16,10 +16,10 @@ private:
    {
        std::string name          = ""; // Sample name.
        uint16_t    length        = 0;  // Sample length in bytes.
-       uint8_t     fileTune      = 0;  // Sample filetune. Only the lower nibble is valid.
+       uint8_t     fileTune      = 0;  // Sample filetune. 
        uint8_t     volume        = 0;  // Linear volume.
-       uint16_t    repeatOffset  = 0;  // Sample repeat offset. Multiply by 2 to get position in bytes.
-       uint16_t    repeatLength  = 0;  // Sample repeat length. Multiply by 2 to get length in bytes.
+       uint16_t    repeatOffset  = 0;  // Sample repeat offset. 
+       uint16_t    repeatLength  = 0;  // Sample repeat length.
 
        Sample() {};
        Sample(const std::vector<char>& sampleBlock);

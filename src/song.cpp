@@ -1,6 +1,4 @@
-#include <numeric>
 #include <iterator>
-#include <iostream>
 #include <exception>
 
 #include "include/wordreader.hpp"
@@ -28,11 +26,8 @@ Song::Song(std::vector<uint8_t>& songData)
         std::vector<uint8_t>::iterator ft = songData.begin() + 1080;
         std::string formatTag(ft, ft + 4);
 
-        std::cout << formatTag << std::endl;
-
         if (fourThirtyOne.find(formatTag))
         {
-            std::cout << "Found match!" << std::endl;
             m_numChannels = 4;
             m_numInstruments = 31;
         }
@@ -82,7 +77,7 @@ Song::Sample::Sample(const std::vector<char>& sampleBlock)
     std::vector<char>::const_iterator it = sampleBlock.begin();
 
     // First 22 bytes is the sample's name.
-    this->name = std::string(it, it + 22);
+    name = std::string(it, it + 22);
     
     it += 22;
 
@@ -92,7 +87,7 @@ Song::Sample::Sample(const std::vector<char>& sampleBlock)
 
     it += 2;
 
-    // Sample's filetune. Only the lower 4 bits are valid.
+    // Sample's finetune. Only the lower 4 bits are valid.
     fileTune = *it & 0xF;
    
     ++it;
@@ -102,12 +97,19 @@ Song::Sample::Sample(const std::vector<char>& sampleBlock)
 
     ++it;
 
+    // Sample's repeat offset in 2-byte words.
+    repeatOffset = 2 * wordreader::readword<decltype(repeatOffset)>(*it, *(it + 1), wordreader::BIG);
+
+    it += 2;
+
     // Sample's repeat length in 2-byte words.
-    repeatLength = wordreader::readword<decltype(repeatLength)>(*it, *(it + 1), wordreader::BIG);
+    repeatLength = 2 * wordreader::readword<decltype(repeatLength)>(*it, *(it + 1), wordreader::BIG);
+
+    it += 2;
     
     // TODO: Remove.
-    printf("Name: %s, Length: %d, fileTune: %d, volume: %d, repeatOffset: %d, repeatLength: %d\n", name.c_str(),
-            length, fileTune, volume, repeatOffset, repeatLength);
+    printf("Name: %s\n \tLength: %d\n \tfileTune: %d\n \tvolume: %d\n \trepeatOffset: %d\n \trepeatLength: %d\n \t(Offset was %d)\n\n", name.c_str(),
+            length, fileTune, volume, repeatOffset, repeatLength, static_cast<int>(std::distance(sampleBlock.begin(), it)));
 
 }
 

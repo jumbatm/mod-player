@@ -13,15 +13,15 @@ namespace wordreader
 
 
     template <typename T>
-    T readword(int8_t first, int8_t second, endian_t type  = BIG_ENDIAN)
+    T readword(uint8_t first, uint8_t second, endian_t type  = BIG_ENDIAN)
     {
-        if (type == BIG_ENDIAN)
+        if (type == BIG)
         {
             // The most significant byte is at the lowest memory address.
             // ie, 0xHHLL, where H is the high byte and L is the low byte.
            return ((first << 8) | second);
         }
-        else if (type == LITTLE_ENDIAN)
+        else if (type == LITTLE)
         {
 
             // The least significant byte is in the highest memory address.
