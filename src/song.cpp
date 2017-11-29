@@ -6,6 +6,8 @@
 #include "include/wordreader.hpp"
 #include "include/song.hpp"
 
+#include <cstdio> // TODO: Remove.
+
 /** Song class implementation **/
 
 const static std::string fourThirtyOne(" M.K. M!K! FLT4 4CHN");
@@ -101,5 +103,11 @@ Song::Sample::Sample(const std::vector<char>& sampleBlock)
     ++it;
 
     // Sample's repeat length in 2-byte words.
+    repeatLength = wordreader::readword<decltype(repeatLength)>(*it, *(it + 1), wordreader::BIG);
+    
+    // TODO: Remove.
+    printf("Name: %s, Length: %d, fileTune: %d, volume: %d, repeatOffset: %d, repeatLength: %d\n", name.c_str(),
+            length, fileTune, volume, repeatOffset, repeatLength);
+
 }
 
