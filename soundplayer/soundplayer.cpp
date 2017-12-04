@@ -1,7 +1,7 @@
 #include "soundplayer.hpp"
 
 #include <pulse/simple.h>
-//#include <pulse/error.h>
+#include <pulse/error.h>
 
 #include <exception>
 #include <iostream> // TODO: (See line 39).
@@ -37,7 +37,7 @@ namespace SoundPlayer
 
         if (!soundServer)
         {
-            //std::cout << pa_strerror(error) << std::endl; // TODO: Format this into the exception string.
+            std::cout << pa_strerror(error) << std::endl; // TODO: Format this into the exception string.
             throw std::runtime_error("Failed to make soundServer.");
         }
 
