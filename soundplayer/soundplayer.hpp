@@ -1,6 +1,5 @@
 #pragma once
 
-#include <pulse/simple.h>
 #include <cstdint>
 
 namespace SoundPlayer
