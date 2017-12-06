@@ -4,7 +4,7 @@
 #include <cstdint>
 
 #include "include/song.hpp"
-#include "soundplayer/soundplayer.hpp"
+#include "sound/sound.hpp"
 
 void displayUsage()
 {
@@ -41,10 +41,9 @@ int main(int argc, char** argv)
 
     std::cout << "Now playing: " << song.name() << std::endl;
 
-    SoundPlayer::init(16500);
+    Sound::init(16500);
 
-    SoundPlayer::playRaw(nullptr, 0);
-
+    Sound::playRaw(nullptr, 0);
     
     return 0;
 }

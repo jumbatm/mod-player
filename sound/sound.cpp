@@ -1,4 +1,4 @@
-#include "soundplayer.hpp"
+#include "sound.hpp"
 
 #include <pulse/simple.h>
 #include <pulse/error.h>
@@ -6,7 +6,7 @@
 #include <exception>
 #include <iostream> // TODO: (See line 39).
 
-namespace SoundPlayer
+namespace Sound
 {
     pa_sample_spec sampleSpec;
     pa_simple *soundServer;
@@ -20,7 +20,7 @@ namespace SoundPlayer
         sampleSpec.channels = 1;
 
         // Must remember to static_cast<unsigned char> before feeding to PulseAudio.
-        // This is because the sample data in MOD files is in two's complement 8 bit.
+        // This is because the sample data in MOD files is in two's complement signed 8 bit.
         
         int error;
         soundServer = pa_simple_new(

@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-namespace SoundPlayer
+namespace Sound
 {
     void init(unsigned sampleRate);
     void playRaw(int8_t *samples, unsigned bufferSizeInBytes);
