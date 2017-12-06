@@ -9,8 +9,8 @@ class Song
 private:
    std::string m_name;
 
-   unsigned m_numChannels;
-   unsigned m_numInstruments;
+   unsigned m_numChannels        = 0;
+   unsigned m_numInstruments     = 0;
 
    struct Sample 
    {
@@ -25,11 +25,19 @@ private:
        Sample(const std::vector<char>& sampleBlock);
    };
 
-   Sample *m_samples;
+   Sample *m_samples              = nullptr;
+   
+   uint8_t m_numPatternsPlayed    = 0;
+   std::vector<uint8_t> m_patternTable; 
 
+   uint8_t m_numPatterns          = 0;
+
+   uint8_t m_songEndJumpPosition;
 public:
     // Constructor.
     Song(std::vector<uint8_t>& songData);
+    // Destructor.
+    ~Song();
 
     /* Getter methods. */
     const std::string& name() const

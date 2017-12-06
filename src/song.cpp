@@ -1,5 +1,7 @@
 #include <iterator>
 #include <exception>
+#include <utility>
+#include <algorithm>
 
 #include "include/wordreader.hpp"
 #include "include/song.hpp"
@@ -22,7 +24,9 @@ Song::Song(std::vector<uint8_t>& songData)
     m_name = std::string(it, it + 20);
     it += 20; // Can't put this compound assignment in function call, as functions calls are evaluated right to left.
     
-    {  // Skip ahead and see how many instruments we have. This at position 1080d.
+    {   // Skip ahead and see how many instruments we have.
+        // There can either be 15 or 31 instruments, so that's either at 1080 or 600 respectively.
+        // TODO: Also check for the 15 instrument case.
         std::vector<uint8_t>::iterator ft = songData.begin() + 1080;
         std::string formatTag(ft, ft + 4);
 
@@ -60,8 +64,36 @@ Song::Song(std::vector<uint8_t>& songData)
         m_samples[i] = Sample(std::vector<char>(it, it + 30));
         it += 30;
     }
-    
 
+    // Read number of patterns in song to be played. (1 byte).
+    m_numPatternsPlayed = *it;
+
+    it += 1;
+
+    // Read song end jump position (1 byte). If this is less than 127, it
+    // specifies where in the file to jump to at the song's end.
+    m_songEndJumpPosition = *it;
+    it += 1;
+
+    // Read pattern table. (128 bytes). We only consider the first m_numPatternsPlayed bytes.
+    m_patternTable = std::move(std::vector<uint8_t>(it, it + m_numPatternsPlayed));
+
+    // The largest value in the pattern table is equal to the number of patterns - 1.
+    // This is the most reliable way to determine this.
+
+    m_numPatterns = *(std::max_element(it, it + 128));
+    it += 128;
+
+
+    // Skip file format tag - we've already had a peek at it.
+    it += 4;
+
+    // Pattern and sample data. Usually less than 64, but can be up to 128.
+}
+
+Song::~Song()
+{
+    delete[] m_samples;
 }
 
 /** Sample class implementation. **/

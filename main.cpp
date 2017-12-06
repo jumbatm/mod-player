@@ -43,7 +43,7 @@ int main(int argc, char** argv)
 
     Sound::init(16500);
 
-    Sound::playRaw(nullptr, 0);
+    //Sound::playRaw(reinterpret_cast<int8_t *>(songData.data()), songData.size());
     
     return 0;
 }
