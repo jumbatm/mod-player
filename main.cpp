@@ -28,10 +28,12 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    // Read the data into a byte-sized vector.
+    // Read the data into a byte vector.
     std::vector<uint8_t> songData(
             (std::istreambuf_iterator<char>(file)),
             (std::istreambuf_iterator<char>()));
+
+    songData.shrink_to_fit();
     
     // From now on, we just work from the buffer.
     file.close();
@@ -44,6 +46,6 @@ int main(int argc, char** argv)
     Sound::init(16500);
 
     //Sound::playRaw(reinterpret_cast<int8_t *>(songData.data()), songData.size());
-    
+
     return 0;
 }

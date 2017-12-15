@@ -20,19 +20,33 @@ private:
        uint8_t     volume        = 0;  // Linear volume.
        uint16_t    repeatOffset  = 0;  // Sample repeat offset. 
        uint16_t    repeatLength  = 0;  // Sample repeat length.
+      
+       // Where do I find the beginning of this sample's sound?
+       std::vector<uint8_t>::const_iterator sampleData;
 
        Sample() {};
        Sample(const std::vector<char>& sampleBlock);
    };
 
-   Sample *m_samples              = nullptr;
+    // Information for each sample is stored here.
+    Sample *m_samples            = nullptr;
+
+    // How many patterns get played in total?
+    uint8_t m_numPatternsPlayed  = 0;    
    
-   uint8_t m_numPatternsPlayed    = 0;
-   std::vector<uint8_t> m_patternTable; 
+    // What order do we play these patterns?
+    std::vector<uint8_t> m_patternTable;
 
-   uint8_t m_numPatterns          = 0;
+    // How many patterns are stored in the MOD file?
+    uint8_t m_numPatterns        = 0; 
 
-   uint8_t m_songEndJumpPosition;
+    // Where in the buffer do I find pattern data?
+    // This stores where in the file to start looking. We can do this because it
+    // is guaranteed that every pattern is 64 lines long.
+    std::vector<uint8_t>::const_iterator m_patternData;
+
+    uint8_t m_songEndJumpPosition;
+
 public:
     // Constructor.
     Song(std::vector<uint8_t>& songData);
