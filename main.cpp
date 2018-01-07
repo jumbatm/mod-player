@@ -3,24 +3,27 @@
 #include <vector>
 #include <cstdint>
 
+#include <cstdio>
+
 #include "include/song.hpp"
 #include "sound/sound.hpp"
 
 void displayUsage()
 {
-    std::cout << "TODO: Document usage." << std::endl;
+    std::cout << "Usage: mplay file instrument" << std::endl;
 };
 
 int main(int argc, char** argv)
 {
     // Check we have the right amount of arguments.
-    if (argc != 2)
+    if (argc != 3)
     {
         displayUsage();
+        return -1;
     }
 
     // If we do, look for the file and write it into a buffer.
-    std::ifstream file(argv[1]);
+    std::ifstream file(argv[1], std::ios::binary);
     
     if (!file.is_open())
     {
@@ -41,11 +44,22 @@ int main(int argc, char** argv)
     // Construct a new song object from this data.
     Song song(songData);
 
-    std::cout << "Now playing: " << song.name() << std::endl;
+    int i = std::stoi(argv[2]);
+    std::cout << "Now playing instrument " << i << " from " << song.name() << std::endl;
 
-    Sound::init(16500);
+    Sound::init(8192);
 
-    //Sound::playRaw(reinterpret_cast<int8_t *>(songData.data()), songData.size());
+    
+    for (auto& byte : songData)
+    {
+        uint8_t after = byte + 128;
+
+        byte = reinterpret_cast<uint8_t>(after);
+    }    
+
+    Sound::playRaw(reinterpret_cast<const int8_t *>(&(*song.m_samples[i].sampleData)), song.m_samples[i].length);
+
+   // Sound::playRaw(reinterpret_cast<const int8_t *>(songData.data()), songData.size());
 
     return 0;
 }

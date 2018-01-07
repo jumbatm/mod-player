@@ -1,14 +1,14 @@
-#include <iterator>
-#include <exception>
-#include <utility>
-#include <algorithm>
+#include <iterator> // FUNC: std::distance().
+#include <exception> // FUNC: std::runtime_error().
+#include <utility> // FUNC:
+#include <algorithm> // FUNC: std::max_element().
 
 #include "include/wordreader.hpp"
 #include "include/song.hpp"
 
-#include <cstdio> // TODO: Remove.
-
-/** Song class implementation **/
+///////////////////////////////////////////////////////////////////////////////
+// Song class implementation
+///////////////////////////////////////////////////////////////////////////////
 
 const static std::string fourThirtyOne(" M.K. M!K! FLT4 4CHN");
 const static std::string sixThirtyOne(" 6CHN");
@@ -81,9 +81,9 @@ Song::Song(std::vector<uint8_t>& songData)
 
     // The largest value in the pattern table is equal to the number of patterns - 1.
     // This is the most reliable way to determine this.
-    m_numPatterns = *(std::max_element(it, it + 128));
-    it += 128;
+    m_numPatterns = (*(std::max_element(it, it + 128))) + 1;
 
+    it += 128;
 
     // Skip file format tag - we've already had a peek at it.
     it += 4;
@@ -92,7 +92,7 @@ Song::Song(std::vector<uint8_t>& songData)
     m_patternData = it;
 
     // Move `it` past all the pattern data.
-    it += (m_numChannels * /* Bytes per note:*/ 4 * sizeof(uint8_t) * /* Number of lines per pattern:*/ 64);
+    it += (m_numChannels * /* Bytes per note:*/ 4 * sizeof(uint8_t) * /* Number of lines per pattern:*/ 64 * m_numPatterns);
 
     // We should now be at the sample data. Assign every sample its voice.
     for (unsigned i = 0; i < m_numInstruments; ++i)
@@ -101,8 +101,6 @@ Song::Song(std::vector<uint8_t>& songData)
         it += m_samples[i].length; // Take advantage of information we already have.
     }
 
-
-    printf("m_numPatterns: %d, m_numPatternsPlayed: %d", static_cast<int>(m_numPatterns), static_cast<int>(m_numPatternsPlayed));
 }
 
 Song::~Song()
@@ -110,7 +108,10 @@ Song::~Song()
     delete[] m_samples;
 }
 
-/** Sample class implementation. **/
+///////////////////////////////////////////////////////////////////////////////
+// Sample class implementation
+///////////////////////////////////////////////////////////////////////////////
+
 Song::Sample::Sample(const std::vector<char>& sampleBlock)
 {
     // First, check that sampleBlock has a length of 30.
@@ -152,10 +153,5 @@ Song::Sample::Sample(const std::vector<char>& sampleBlock)
     repeatLength = 2 * wordreader::readword<decltype(repeatLength)>(*it, *(it + 1), wordreader::BIG);
 
     it += 2;
-    
-    // TODO: Remove.
-    //printf("Name: %s\n \tLength: %d\n \tfileTune: %d\n \tvolume: %d\n \trepeatOffset: %d\n \trepeatLength: %d\n \t(Offset was %d)\n\n", name.c_str(),
-       //     length, fileTune, volume, repeatOffset, repeatLength, static_cast<int>(std::distance(sampleBlock.begin(), it)));
-
 }
 

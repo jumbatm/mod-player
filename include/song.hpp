@@ -6,7 +6,7 @@
 
 class Song
 {
-private:
+   public: // TODO: Change back to private
    std::string m_name;
 
    unsigned m_numChannels        = 0;

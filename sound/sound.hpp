@@ -5,5 +5,5 @@
 namespace Sound
 {
     void init(unsigned sampleRate);
-    void playRaw(int8_t *samples, unsigned bufferSizeInBytes);
+    void playRaw(int8_t const *samples, unsigned bufferSizeInBytes);
 };

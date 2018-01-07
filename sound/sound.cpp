@@ -43,7 +43,7 @@ namespace Sound
 
     }
 
-    void playRaw(int8_t *rawData, unsigned size)
+    void playRaw(int8_t const *rawData, unsigned size)
     {
         int error;
 
