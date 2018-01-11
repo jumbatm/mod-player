@@ -2,21 +2,21 @@
 #include <fstream>
 #include <vector>
 #include <cstdint>
+#include <algorithm>
 
-#include <cstdio>
-
-#include "include/song.hpp"
+#include "mod/song.hpp"
 #include "sound/sound.hpp"
+#include "sound/mixer.hpp"
 
 void displayUsage()
 {
-    std::cout << "Usage: mplay file instrument" << std::endl;
+    std::cout << "Usage: mplay file instrument1 instrument2" << std::endl;
 };
 
 int main(int argc, char** argv)
 {
     // Check we have the right amount of arguments.
-    if (argc != 3)
+    if (argc != 4)
     {
         displayUsage();
         return -1;
@@ -42,24 +42,31 @@ int main(int argc, char** argv)
     file.close();
 
     // Construct a new song object from this data.
-    Song song(songData);
+    Song song(songData); 
 
     int i = std::stoi(argv[2]);
-    std::cout << "Now playing instrument " << i << " from " << song.name() << std::endl;
+    int j = std::stoi(argv[3]);
 
-    Sound::init(8192);
+    std::cout << "Now playing instruments " << i << " and " << j << " from " << song.name() << std::endl;
+
+    Sound::init(8192); 
+    // Tentatively the highest frequency needed to play the highest note at the highest finetune: 32842
 
     
-    for (auto& byte : songData)
+    for (auto& byte : songData) // TODO: Only convert the bytes we need to.
     {
-        uint8_t after = byte + 128;
+        byte = static_cast<uint8_t>( reinterpret_cast<int8_t&>(byte) + 128 );
+    }
 
-        byte = reinterpret_cast<uint8_t>(after);
-    }    
+    Mixer::newTrack(std::max(song.m_samples[i].length, song.m_samples[j].length));
 
-    Sound::playRaw(reinterpret_cast<const int8_t *>(&(*song.m_samples[i].sampleData)), song.m_samples[i].length);
+    Mixer::mixIn(0, &(*song.m_samples[i].sampleData), song.m_samples[i].length);
+    Mixer::mixIn(0, &(*song.m_samples[j].sampleData), song.m_samples[j].length);
 
-   // Sound::playRaw(reinterpret_cast<const int8_t *>(songData.data()), songData.size());
+    Mixer::TrackInfo t = Mixer::getTrack();
+
+    Sound::playRaw(t.data, t.size);
+
 
     return 0;
 }

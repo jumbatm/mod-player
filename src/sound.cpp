@@ -1,4 +1,4 @@
-#include "sound.hpp"
+#include "sound/sound.hpp"
 
 #include <pulse/simple.h>
 #include <pulse/error.h>
@@ -43,7 +43,7 @@ namespace Sound
 
     }
 
-    void playRaw(int8_t const *rawData, unsigned size)
+    void playRaw(uint8_t const *rawData, unsigned size)
     {
         int error;
 

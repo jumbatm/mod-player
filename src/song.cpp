@@ -3,8 +3,8 @@
 #include <utility> // FUNC:
 #include <algorithm> // FUNC: std::max_element().
 
-#include "include/wordreader.hpp"
-#include "include/song.hpp"
+#include <wordreader.hpp>
+#include <mod/song.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Song class implementation
