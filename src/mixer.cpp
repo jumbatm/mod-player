@@ -26,7 +26,7 @@ namespace Mixer
 
     }
 
-    void mixIn(size_t offset, uint8_t const* track, size_t trackSize) // TODO: Overload for iterator.
+    void mixIn(size_t offset, uint8_t const* track, size_t trackSize, double scalefactor) // TODO: Overload for iterator.
     {
         // Check that the end of the added track doesn't go off the edge of the
         // current track.
@@ -36,12 +36,21 @@ namespace Mixer
         }
 
         // Mix the two tracks by performing an average + addition.
-        // CONSIDER: Use uint16_ts to get more resolution - something I'll have
+        // TODO: Use uint16_ts to get more resolution - something I'll have
         // to test.
-        for (size_t i = 0; i < trackSize; ++i)
+        
+        unsigned currentTrackIndex = 0;
+        for (double trackIndex = 0; trackIndex < trackSize; trackIndex += scalefactor, ++currentTrackIndex)
         {
-            currentTrack[offset + i] >>= 1; // Divide by 2.
-            currentTrack[offset + i] += track[i] >> 1;
+            // Using equation described from http://www.vttoth.com/CMS/index.php/technical-notes/68.
+            // Instead of naively taking an average, we can do
+            // Z = A + B - normalise(AB)
+            
+            auto& A = currentTrack[offset + currentTrackIndex];
+            auto& B = track[static_cast<unsigned>(trackIndex)];
+
+            A = A + B - (A*B)/256.0;
+
         }
     }
 
