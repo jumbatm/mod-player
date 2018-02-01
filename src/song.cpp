@@ -155,3 +155,8 @@ Song::Sample::Sample(const std::vector<char>& sampleBlock)
     it += 2;
 }
 
+void play()
+{
+    
+}
+

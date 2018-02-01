@@ -53,7 +53,7 @@ public:
     // Destructor.
     ~Song();
 
-    /* Getter methods. */
+    // Getter methods.
     const std::string& name() const
     {
         return m_name;
@@ -63,4 +63,7 @@ public:
     {
         return m_numInstruments;
     }
+
+    // Play the song through speakers.
+    void play();
 };

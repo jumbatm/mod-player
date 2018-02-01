@@ -12,6 +12,6 @@ namespace Mixer
     };
 
     void newTrack(unsigned sampleSize); // Initialise a new track.
-    void mixIn(size_t offset, uint8_t const* track, size_t size, double scalefactor = 1.0); // Mix in new track.
+    void mixIn(size_t offset, const uint8_t *const track, size_t size, double scalefactor = 1.0); // Mix in new track.
     TrackInfo getTrack();
 }

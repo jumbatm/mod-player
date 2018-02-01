@@ -26,7 +26,7 @@ namespace Mixer
 
     }
 
-    void mixIn(size_t offset, uint8_t const* track, size_t trackSize, double scalefactor) // TODO: Overload for iterator.
+    void mixIn(size_t offset, const uint8_t *const track, size_t trackSize, double scalefactor) // TODO: Overload for iterator.
     {
         // Check that the end of the added track doesn't go off the edge of the
         // current track.
@@ -35,10 +35,8 @@ namespace Mixer
             throw std::runtime_error("Cannot fit specified track in currentTrack!");
         }
 
-        // Mix the two tracks by performing an average + addition.
         // TODO: Use uint16_ts to get more resolution - something I'll have
         // to test.
-        
         unsigned currentTrackIndex = 0;
         for (double trackIndex = 0; trackIndex < trackSize; trackIndex += scalefactor, ++currentTrackIndex)
         {
