@@ -10,13 +10,13 @@
 
 void displayUsage()
 {
-    std::cout << "Usage: mplay file instrument1 instrument2" << std::endl;
-};
+    std::cout << "Usage: ./mplay <filename.mod>\n";
+}
 
 int main(int argc, char** argv)
 {
     // Check we have the right amount of arguments.
-    if (argc != 4)
+    if (argc != 2)
     {
         displayUsage();
         return -1;
@@ -43,30 +43,16 @@ int main(int argc, char** argv)
 
     // Construct a new song object from this data.
     Song song(songData); 
+    
+    song.play();
 
-    int i = std::stoi(argv[2]);
-    int j = std::stoi(argv[3]);
 
-    std::cout << "Now playing instruments " << i << " and " << j << " from " << song.name() << std::endl;
-
-    Sound::init(8192); 
     // Tentatively the highest frequency needed to play the highest note at the highest finetune: 32842
-
     
     for (auto& byte : songData) // TODO: Only convert the bytes we need to.
     {
         byte = static_cast<uint8_t>( reinterpret_cast<int8_t&>(byte) + 128 );
     }
-
-    Mixer::newTrack(std::max(song.m_samples[i].length, song.m_samples[j].length));
-
-    Mixer::mixIn(0, &(*song.m_samples[i].sampleData), song.m_samples[i].length);
-    Mixer::mixIn(0, &(*song.m_samples[j].sampleData), song.m_samples[j].length);
-
-    Mixer::TrackInfo t = Mixer::getTrack();
-
-    Sound::playRaw(t.data, t.size);
-
 
     return 0;
 }
