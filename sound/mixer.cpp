@@ -55,11 +55,6 @@ namespace Mixer
         }
     }
 
-    void mixIn(Song::Sample& s, uint16_t period)
-    {
-
-    }
-
     TrackInfo getTrack()
     {
         if (currentTrack == nullptr) throw std::runtime_error("No current track - call newTrack first!");

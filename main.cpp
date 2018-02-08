@@ -42,17 +42,14 @@ int main(int argc, char** argv)
     file.close();
 
     // Construct a new song object from this data.
-    Song song(songData); 
-    
+    Song song(songData);
+
+    song.for_each_sound_sample<uint8_t>([](uint8_t& byte)
+            {
+                byte = reinterpret_cast<int8_t&>(byte) + 128;
+            });
+
     song.play();
-
-
-    // Tentatively the highest frequency needed to play the highest note at the highest finetune: 32842
-    
-    for (auto& byte : songData) // TODO: Only convert the bytes we need to.
-    {
-        byte = static_cast<uint8_t>( reinterpret_cast<int8_t&>(byte) + 128 );
-    }
 
     return 0;
 }

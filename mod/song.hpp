@@ -3,10 +3,15 @@
 #include <string>
 #include <vector>
 #include <cstdint>
+#include <functional>
+#include <numeric>
+
+#include <cstdio>
+#include <iostream>
 
 class Song
 {
-   public: // TODO: Make private again.
+   private:
    std::string m_name;
 
    unsigned m_numChannels        = 0;
@@ -22,14 +27,16 @@ class Song
        uint16_t    repeatLength  = 0;  // Sample repeat length.
       
        // Where do I find the beginning of this sample's sound?
-       std::vector<uint8_t>::const_iterator sampleData;
+       std::vector<uint8_t>::iterator sampleData;
+
+       // Samples are allowed to modify their data however they please.
 
        Sample() {};
        Sample(const std::vector<char>& sampleBlock);
    };
 
     // Information for each sample is stored here.
-    Sample *m_samples            = nullptr;
+    std::vector<Sample> m_samples;
 
     // How many patterns get played in total?
     uint8_t m_numPatternsPlayed  = 0;    
@@ -47,6 +54,10 @@ class Song
 
     uint8_t m_songEndJumpPosition;
 
+    // Where in the file do I find the actual sample sounds? Keep track of this
+    // so that I can do conversions to this data if I have to.
+    std::vector<uint8_t>::iterator m_soundData;
+
 public:
     // Constructor.
     Song(std::vector<uint8_t>& songData);
@@ -62,6 +73,19 @@ public:
     unsigned const& numInstruments() const
     {
         return m_numInstruments;
+    }
+
+    // Manipulate sound data in some way.
+    template<typename T>
+    void for_each_sound_sample(std::function<void(T&)> f)
+    {
+        for (Sample& s : m_samples)
+        {
+            for (auto it = s.sampleData; it != s.sampleData + s.length; ++it)
+            {
+                f(*it);
+            }
+        }
     }
 
     // Play the song through speakers.
