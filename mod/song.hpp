@@ -27,7 +27,7 @@ class Song
        uint16_t    repeatLength  = 0;  // Sample repeat length.
       
        // Where do I find the beginning of this sample's sound?
-       std::vector<uint8_t>::iterator sampleData;
+       std::vector<uint8_t> sampleData;
 
        // Samples are allowed to modify their data however they please.
 
@@ -35,7 +35,8 @@ class Song
        Sample(const std::vector<char>& sampleBlock);
    };
 
-    // Information for each sample is stored here.
+
+    // Each sample object is stored here.
     std::vector<Sample> m_samples;
 
     // How many patterns get played in total?
@@ -50,13 +51,9 @@ class Song
     // Where in the buffer do I find pattern data?
     // This stores where in the file to start looking. We can do this because it
     // is guaranteed that every pattern is 64 lines long.
-    std::vector<uint8_t>::const_iterator m_patternData;
+    std::vector<uint8_t> m_patternData;
 
     uint8_t m_songEndJumpPosition;
-
-    // Where in the file do I find the actual sample sounds? Keep track of this
-    // so that I can do conversions to this data if I have to.
-    std::vector<uint8_t>::iterator m_soundData;
 
 public:
     // Constructor.
@@ -81,9 +78,9 @@ public:
     {
         for (Sample& s : m_samples)
         {
-            for (auto it = s.sampleData; it != s.sampleData + s.length; ++it)
+            for (T& sample : s.sampleData)
             {
-                f(*it);
+                f(sample);
             }
         }
     }

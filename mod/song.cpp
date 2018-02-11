@@ -76,7 +76,7 @@ Song::Song(std::vector<uint8_t>& songData)
     cit += 1;
 
     // Read pattern table. (128 bytes). We only consider the first m_numPatternsPlayed bytes.
-    m_patternTable = std::move(std::vector<uint8_t>(cit, cit + m_numPatternsPlayed));
+    m_patternTable = std::vector<uint8_t>(cit, cit + m_numPatternsPlayed);
 
     // The largest value in the pattern table is equal to the number of patterns - 1.
     // This is the most reliable way to determine this.
@@ -88,27 +88,18 @@ Song::Song(std::vector<uint8_t>& songData)
     cit += 4; 
 
     // Pattern and sample data. Usually less than 64, but can be up to 128.
-    m_patternData = cit;
+    size_t patternDataLength = (m_numChannels * /* Bytes per note:*/ 4 * sizeof(uint8_t) * /* Number of lines per pattern:*/ 64 * m_numPatterns);
+    m_patternData = std::vector<uint8_t>(cit, cit + patternDataLength);
 
     // Move `cit` past all the pattern data.
-    cit += (m_numChannels * /* Bytes per note:*/ 4 * sizeof(uint8_t) * /* Number of lines per pattern:*/ 64 * m_numPatterns);
+    cit += patternDataLength;
 
-    // We should now be at the sample data. 
-    int x = std::distance<decltype(cit)>(songData.begin(), cit); // HERE: std::distance is giving too large a value.
-
-    m_soundData = songData.begin() + x;
-
-    /*for (auto& iter = m_soundData; iter != songData.end(); ++iter)
-    {
-        *iter = static_cast<uint8_t>( reinterpret_cast<int8_t&>(*iter) + 128 );
-    }*/
-
-    
-    // Assign every sample its voice.
+    // Assign every sample its voice. Samples can modify their own copy of their
+    // voice.
     for (auto& sample : m_samples)
     {
         auto x = std::distance<decltype(cit)>(songData.begin(), cit);
-        sample.sampleData = songData.begin() + x;
+        sample.sampleData = std::vector<uint8_t>(songData.begin() + x, songData.begin() + sample.length);
         cit += sample.length; // Take advantage of information we already have.
     }
 
