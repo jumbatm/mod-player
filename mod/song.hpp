@@ -9,6 +9,8 @@
 #include <cstdio>
 #include <iostream>
 
+#include "mod/effects.hpp"
+
 class Song
 {
    private:
@@ -16,6 +18,11 @@ class Song
 
    unsigned m_numChannels        = 0;
    unsigned m_numInstruments     = 0;
+
+   // TODO: Make it so that the Sample and Note struct doesn't have to be
+   // included in order to use the Song class.
+   //
+   // Possibly solved PIMPL?
 
    struct Sample 
    {
@@ -26,13 +33,23 @@ class Song
        uint16_t    repeatOffset  = 0;  // Sample repeat offset. 
        uint16_t    repeatLength  = 0;  // Sample repeat length.
       
-       // Where do I find the beginning of this sample's sound?
+       // Audio data of this sample.
        std::vector<uint8_t> sampleData;
-
-       // Samples are allowed to modify their data however they please.
 
        Sample() {};
        Sample(const std::vector<char>& sampleBlock);
+   };
+
+   struct Note
+   {
+       uint8_t index; // What sample is this?
+       uint16_t period; // What period do we play the sample at?
+
+       effect_t effect; // Effect applied to the sample.
+       uint8_t argument; // Argument for this effect.
+
+       // Ctor taking a raw word from a MOD file.
+       Note(uint16_t word);
    };
 
 
@@ -57,7 +74,12 @@ class Song
 
 public:
     // Constructor.
+
+    // TODO: Change to const std::vector<uint8_t>&, because we no longer make
+    // modifications to songData - we now give each class its own copy of the
+    // information that it might want to modify at will.
     Song(std::vector<uint8_t>& songData);
+
     // Destructor.
     ~Song();
 
