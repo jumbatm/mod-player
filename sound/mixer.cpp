@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include <cstdint>
 
+// TODO: Move away from singleton pattern, we want to be able to mix multiple
+// pieces of data.
+
 namespace Mixer
 {
     namespace
@@ -29,7 +32,8 @@ namespace Mixer
 
     }
 
-    void mixIn(size_t offset, const uint8_t *const track, size_t trackSize, double scalefactor) // TODO: Overload for iterator.
+    // TODO: C++ify this code, it's very C-like at the moment.
+    void mixIn(size_t offset, const uint8_t *const track, size_t trackSize, double scalefactor)
     {
         // Check that the end of the added track doesn't go off the edge of the
         // current track.
