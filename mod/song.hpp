@@ -44,9 +44,6 @@ public:
     // Constructor.
     Song(const std::vector<uint8_t>& songData);
 
-    // Destructor.
-    ~Song();
-
     // Getter methods.
     const std::string& name() const
     {

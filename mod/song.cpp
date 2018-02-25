@@ -3,8 +3,10 @@
 #include <algorithm> // max_element().
 
 #include "mod/song.hpp"
+#include "mod/notemixer.hpp"
+
 #include "sound/mixer.hpp"
-#include "wordreader.hpp"
+#include "sound/sound.hpp"
 
 #define SOFT_ASSERT(x) _soft_assert(__FILE__, __LINE__, x)
 void _soft_assert(const char* filename, const unsigned line, bool condition)
@@ -16,7 +18,7 @@ void _soft_assert(const char* filename, const unsigned line, bool condition)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Song class implementation
+// File reading.
 ///////////////////////////////////////////////////////////////////////////////
 
 const static std::string fourThirtyOne(" M.K. M!K! FLT4 4CHN");
@@ -117,9 +119,44 @@ Song::Song(const std::vector<uint8_t>& songData)
     SOFT_ASSERT(cit == songData.end());
 }
 
-Song::~Song()
+////////////////////////////////////////////////////////////////////////////////
+// Song playing.
+////////////////////////////////////////////////////////////////////////////////
+namespace {
+class Playing
 {
-}
+    const NoteMixer m_mixedSample;
+    size_t index = 0;
+
+    public:
+    size_t samplesLeft;
+
+    Playing(const NoteMixer& n) :
+        m_mixedSample(n),
+        samplesLeft(n.size()) {}
+
+    Playing(Sample& s, double scalefactor = 1.0) :
+        m_mixedSample(s, scalefactor),
+        samplesLeft(m_mixedSample.size()) {}
+                
+
+    uint8_t getSample()
+    {
+        if (samplesLeft > 0)
+        {
+            --samplesLeft;
+            return m_mixedSample.at(index++);
+        }
+        else
+        {
+           /* throw std::runtime_error(
+                "Playing::getSample(): Cannot return a sample without any samples left! "
+                "Did you forget to remove this sample?");*/
+            return static_cast<int8_t>(0);
+        }
+    }
+};
+} // end anonymous namespace
 
 void Song::play()
 {
@@ -143,5 +180,13 @@ void Song::play()
     // Clear the buffer.
     //
     // Go to second step.
+
+    // Testing:
+    Sound::init(8192);
+
+    constexpr size_t i = 0;
+
+    Sound::playRaw(&(m_samples[i].sampleData[i]), m_samples[i].sampleData.size());
+
 }
 

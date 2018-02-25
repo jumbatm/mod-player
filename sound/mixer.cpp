@@ -16,6 +16,14 @@ namespace Mixer
         size_t currentTrackSize = 0;
     }
 
+    namespace helper
+    {
+        size_t scale(size_t nthElement, double scaleFactor)
+        {
+            return nthElement * scaleFactor;
+        }
+    }
+
     void newTrack(unsigned sampleSize)
     {
         // Check if there's currently an allocated track.
@@ -44,8 +52,10 @@ namespace Mixer
 
         // TODO: Use uint16_ts to get more resolution - something I'll have
         // to test.
-        unsigned currentTrackIndex = 0;
-        for (double trackIndex = 0; trackIndex < trackSize; trackIndex += scalefactor, ++currentTrackIndex)
+        size_t currentTrackIndex = 0;
+        for (size_t trackIndex = 0; 
+                trackIndex < trackSize; 
+                currentTrackIndex = helper::scale(trackIndex++, scalefactor))
         {
             // Using equation described from http://www.vttoth.com/CMS/index.php/technical-notes/68.
             // Instead of naively taking an average, we can do
