@@ -26,8 +26,7 @@ int main(int argc, char** argv)
     std::ifstream file(argv[1], std::ios::binary);
     
     if (!file.is_open())
-    {
-        std::cout << "File not found!" << std::endl; return -1;
+    { std::cout << "File not found!" << std::endl; return -1;
     }
 
     // Read the data into a byte vector.

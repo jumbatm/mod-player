@@ -7,7 +7,16 @@
 
 uint8_t NoteMixer::at(size_t index) const
 {
-    return m_sample.sampleData.at(
-            Mixer::helper::scale(m_startOffset + index, m_scaleFactor)
-            );
+    if (index < size())
+    {
+        // TODO: Test and confirm that we can never go wrong using unsafe
+        // indexing[]
+        return m_sample.sampleData.at(index);
+    }
+    else // Attempt to access a value outside of range.
+    {
+        return m_sample.sampleData.at(
+                m_jumpPosition + (index % size())
+                );
+    }
 }
