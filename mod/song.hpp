@@ -34,8 +34,7 @@ class Song
     uint8_t m_numPatterns        = 0; 
 
     // Where in the buffer do I find pattern data?
-    // This stores where in the file to start looking. We can do this because it
-    // is guaranteed that every pattern is 64 lines long.
+    // This is a copy of the pattern data.
     std::vector<uint8_t> m_patternData;
 
     uint8_t m_songEndJumpPosition;

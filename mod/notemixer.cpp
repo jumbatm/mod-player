@@ -1,22 +1,28 @@
 #include "mod/notemixer.hpp"
 #include "sound/mixer.hpp"
 
+#include <iostream> // TODO:
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // NoteMixer function definitions.
 ////////////////////////////////////////////////////////////////////////////////
 
 uint8_t NoteMixer::at(size_t index) const
 {
-    if (index < size())
+    size_t scaledIndex = index * m_scaleFactor;
+
+    if (index < NoteMixer::size())
     {
         // TODO: Test and confirm that we can never go wrong using unsafe
         // indexing[]
-        return m_sample.sampleData.at(index);
+        return m_sample.sampleData.at(scaledIndex);
     }
-    else // Attempt to access a value outside of range.
+    else // We need to look at where to jump to because we've been asked for a value
+        // outside of the sample's actual indices.
     {
-        return m_sample.sampleData.at(
-                m_jumpPosition + (index % size())
-                );
+        size_t idx = (m_jumpPosition + scaledIndex) % NoteMixer::size();
+
+        return m_sample.sampleData.at(idx);
     }
 }

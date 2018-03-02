@@ -1,6 +1,9 @@
 #include <iterator> // distance().
 #include <exception> // runtime_error
 #include <algorithm> // max_element().
+#include <array>
+
+#include <iostream>
 
 #include "mod/song.hpp"
 #include "mod/notemixer.hpp"
@@ -129,31 +132,19 @@ class Playing
     size_t index = 0;
 
     public:
-    size_t samplesLeft;
-
-    Playing(const NoteMixer& n) :
-        m_mixedSample(n),
-        samplesLeft(n.size()) {}
-
     Playing(Sample& s, double scalefactor = 1.0) :
-        m_mixedSample(s, scalefactor),
-        samplesLeft(m_mixedSample.size()) {}
+        m_mixedSample(s, scalefactor) {}
                 
 
     uint8_t getSample()
     {
-        if (samplesLeft > 0)
-        {
-            --samplesLeft;
-            return m_mixedSample.at(index++);
-        }
-        else
-        {
-           /* throw std::runtime_error(
-                "Playing::getSample(): Cannot return a sample without any samples left! "
-                "Did you forget to remove this sample?");*/
-            return static_cast<int8_t>(0);
-        }
+        std::cout << "Request for: " << index << "(" << size() << ")\n";
+        return m_mixedSample.at(index++);
+    }
+
+    size_t size()
+    {
+        return m_mixedSample.size();
     }
 };
 } // end anonymous namespace
@@ -184,9 +175,19 @@ void Song::play()
     // Testing:
     Sound::init(8192);
 
-    constexpr size_t i = 0;
+    Playing p(m_samples[4], 4);
 
-    Sound::playRaw(&(m_samples[i].sampleData[i]), m_samples[i].sampleData.size());
+    std::vector<uint8_t> buffer(p.size());
+
+    for (;;)
+    {
+        for (auto& bufsam : buffer)
+        {
+            bufsam = p.getSample();
+        }
+        
+        Sound::playRaw(&buffer[0], buffer.size());
+    }
 
 }
 

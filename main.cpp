@@ -8,6 +8,13 @@
 #include "sound/sound.hpp"
 #include "sound/mixer.hpp"
 
+enum ExitCodes
+{
+    SUCCESS = 0,
+    NOT_ENOUGH_ARGUMENTS,
+    FILE_NOT_FOUND
+};
+
 void displayUsage()
 {
     std::cout << "Usage: ./mplay <filename.mod>\n";
@@ -19,14 +26,16 @@ int main(int argc, char** argv)
     if (argc != 2)
     {
         displayUsage();
-        return -1;
+        return NOT_ENOUGH_ARGUMENTS;
     }
 
     // If we do, look for the file and write it into a buffer.
     std::ifstream file(argv[1], std::ios::binary);
     
     if (!file.is_open())
-    { std::cout << "File not found!" << std::endl; return -1;
+    { 
+        std::cout << "File not found!" << std::endl; 
+        return FILE_NOT_FOUND;
     }
 
     // Read the data into a byte vector.
@@ -51,5 +60,5 @@ int main(int argc, char** argv)
 
     song.play();
 
-    return 0;
+    return SUCCESS;
 }
