@@ -125,28 +125,6 @@ Song::Song(const std::vector<uint8_t>& songData)
 ////////////////////////////////////////////////////////////////////////////////
 // Song playing.
 ////////////////////////////////////////////////////////////////////////////////
-namespace {
-class Playing
-{
-    const NoteMixer m_mixedSample;
-    size_t index = 0;
-
-public:
-    Playing(Sample& s, double scalefactor = 1.0) :
-        m_mixedSample(s, scalefactor) {}
-                
-
-    uint8_t getSample()
-    {
-        return m_mixedSample.at(index++);
-    }
-
-    size_t size()
-    {
-        return m_mixedSample.size();
-    }
-};
-} // end anonymous namespace
 
 void Song::play()
 {
@@ -174,7 +152,7 @@ void Song::play()
     // Testing:
     Sound::init(8192);
 
-    Playing p(m_samples[4], 1);
+    NoteMixer p(m_samples[4]);
 
     std::vector<uint8_t> buffer(10);
 
@@ -182,7 +160,7 @@ void Song::play()
     {
         for (auto& bufsam : buffer)
         {
-            bufsam = p.getSample();
+            bufsam = p.next();
         }
         
         Sound::playRaw(&buffer[0], buffer.size());

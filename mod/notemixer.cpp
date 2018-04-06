@@ -23,3 +23,8 @@ uint8_t NoteMixer::at(size_t index) const
         return m_sample.sampleData.at(idx);
     }
 }
+
+uint8_t NoteMixer::next() 
+{
+    return NoteMixer::at(m_index++);
+}

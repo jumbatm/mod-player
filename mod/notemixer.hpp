@@ -16,10 +16,14 @@ class NoteMixer
         m_sample(s),
         m_startOffset(startOffset),
         m_scaleFactor(scaleFactor),
-        m_jumpPosition(m_sample.repeatOffset / m_scaleFactor) {}
+        m_jumpPosition(m_sample.repeatOffset / m_scaleFactor),
+        m_index(startOffset) {}
 
     // Return the sample at a certain index.
     uint8_t at(size_t index) const; // TODO: Consider templating this for the return type.
+
+    // Get the sample at the internal index and increment.
+    uint8_t next();
 
     // Query the size after scaling.
     size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
