@@ -131,14 +131,13 @@ class Playing
     const NoteMixer m_mixedSample;
     size_t index = 0;
 
-    public:
+public:
     Playing(Sample& s, double scalefactor = 1.0) :
         m_mixedSample(s, scalefactor) {}
                 
 
     uint8_t getSample()
     {
-        std::cout << "Request for: " << index << "(" << size() << ")\n";
         return m_mixedSample.at(index++);
     }
 
@@ -175,9 +174,9 @@ void Song::play()
     // Testing:
     Sound::init(8192);
 
-    Playing p(m_samples[4], 4);
+    Playing p(m_samples[4], 1);
 
-    std::vector<uint8_t> buffer(p.size());
+    std::vector<uint8_t> buffer(10);
 
     for (;;)
     {

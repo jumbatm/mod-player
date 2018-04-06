@@ -8,6 +8,8 @@ class NoteMixer
     size_t m_startOffset = 0; // Where in the sample data should we start?
     double m_scaleFactor = 1.0; // How much are we warping its play speed by?
     size_t m_jumpPosition = 0; // Where to jump to when indexing to end of sample?
+    
+    size_t m_index = 0;
 
     public:
     NoteMixer(Sample& s, double scaleFactor = 1.0, size_t startOffset = 0) : 
@@ -20,7 +22,7 @@ class NoteMixer
     uint8_t at(size_t index) const; // TODO: Consider templating this for the return type.
 
     // Query the size after scaling.
-    size_t size() const { return m_sample.sampleData.size() / m_scaleFactor; }
+    size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
 
 };
 

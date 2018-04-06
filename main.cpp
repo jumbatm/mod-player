@@ -10,7 +10,7 @@
 
 enum ExitCodes
 {
-    SUCCESS = 0,
+    NOTHING_TO_REPORT = 0,
     NOT_ENOUGH_ARGUMENTS,
     FILE_NOT_FOUND
 };
@@ -60,5 +60,5 @@ int main(int argc, char** argv)
 
     song.play();
 
-    return SUCCESS;
+    return NOTHING_TO_REPORT;
 }
