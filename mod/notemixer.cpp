@@ -11,16 +11,14 @@ uint8_t NoteMixer::at(size_t index) const
 
     if (scaledIndex < NoteMixer::size())
     {
-        // TODO: Test and confirm that we can never go wrong using unsafe
-        // indexing[]
-        return m_sample.sampleData.at(scaledIndex);
+        return m_sample.sampleData[scaledIndex];
     }
     else // We need to look at where to jump to because we've been asked for a value
          // outside of the sample's actual indices.
     {
         size_t idx = (m_jumpPosition + scaledIndex) % NoteMixer::size();
 
-        return m_sample.sampleData.at(idx);
+        return m_sample.sampleData[idx];
     }
 }
 
