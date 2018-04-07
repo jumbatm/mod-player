@@ -1,5 +1,25 @@
 #include "mod/notemixer.hpp"
-#include "sound/mixer.hpp"
+#include "mod/effect.hpp"
+#include "wordreader.hpp"
+
+namespace
+{
+    struct note
+    {
+        uint8_t sampleNumber = 0;
+        uint16_t period = 0;
+        effect_t effect = SILENCE;
+        uint16_t argument = 0;
+
+        note(uint32_t data)
+        {}
+    };
+}
+
+NoteMixer NoteMixer::Create(Sample& s, uint32_t note)
+{
+    return NoteMixer(s);
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 // NoteMixer function definitions.

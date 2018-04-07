@@ -128,28 +128,6 @@ Song::Song(const std::vector<uint8_t>& songData)
 
 void Song::play()
 {
-    // Set up a small buffer and a currentlyPlaying vector.
-    //
-    // Read some amount from the pattern table. Add these to the
-    // currentlyPlaying vector.
-    //
-    // Using the Notes' getAt(int) method called repeatedly, fill the buffer
-    // with the correct samples, deducting from samplesLeft. 
-    //
-    // If samplesLeft is
-    // 0, remove from vector. (Possibly use an implementation where the sample
-    // isn't actually removed - we don't want to incur a vector resize, it's
-    // suitable to just write over that vector the next time we want to insert
-    // to list. The issue then is that we always have to iterate over every
-    // value, unless we also keep track of how many we expect.
-    //
-    // Send the buffer to PulseAudio to be played. Blocking.
-    //
-    // Clear the buffer.
-    //
-    // Go to second step.
-
-    // Testing:
     Sound::init(8192);
 
     NoteMixer p(m_samples[4]);

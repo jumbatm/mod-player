@@ -1,6 +1,6 @@
 #pragma once
 
-enum class effect_t
+enum effect_t
 {
    // Just for us.
    SILENCE = -1,

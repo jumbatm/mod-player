@@ -9,9 +9,7 @@
 #include <cstdio>
 #include <iostream>
 
-#include "mod/effects.hpp"
 #include "mod/sample.hpp"
-#include "mod/note.hpp"
 
 class Song
 {

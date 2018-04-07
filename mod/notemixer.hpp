@@ -1,10 +1,11 @@
 #pragma once
+#include <cstdint>
 
 #include "mod/sample.hpp"
 
 class NoteMixer
 {
-    Sample& m_sample; // The sample object we interpolate on.
+    const Sample& m_sample; // The sample object we interpolate on.
     size_t m_startOffset = 0; // Where in the sample data should we start?
     double m_scaleFactor = 1.0; // How much are we warping its play speed by?
     size_t m_jumpPosition = 0; // Where to jump to when indexing to end of sample?
@@ -27,6 +28,8 @@ class NoteMixer
 
     // Query the size after scaling.
     size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
+
+    static NoteMixer Create(Sample& samp, uint32_t note);
 
 };
 
