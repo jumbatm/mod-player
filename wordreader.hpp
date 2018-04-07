@@ -11,9 +11,15 @@ namespace wordreader
         LITTLE
     };
 
+    enum class nibble_t : bool
+    {
+        LOW = 0,
+        HIGH
+    };
+
 
     template <typename T>
-    T readword(uint8_t first, uint8_t second, endian_t type  = BIG)
+    T readword(uint8_t first, uint8_t second, endian_t type = BIG)
     {
         if (type == BIG)
         {
@@ -30,8 +36,29 @@ namespace wordreader
         }
         else
         {
-            return (T)0;
+            return static_cast<T>(0);
         }
 
+    }
+
+    template <typename T = uint8_t>
+    T readnibble(uint8_t byte, nibble_t which = nibble_t::LOW)
+    {
+        if (which == nibble_t::LOW)
+        {
+            return byte & 0xF;
+        }
+        else
+        {
+            return byte >> 8;
+        }
+    }
+
+    template <typename T>
+    uint8_t readbyte(T data, size_t index)
+    {
+        static_assert(index < sizeof(T), "Byte index out of range.");
+        //return (data & (0xFF >> 8 * index)) << 
+        return 0;
     }
 }
