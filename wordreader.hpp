@@ -53,12 +53,4 @@ namespace wordreader
             return byte >> 8;
         }
     }
-
-    template <typename T>
-    uint8_t readbyte(T data, size_t index)
-    {
-        static_assert(index < sizeof(T), "Byte index out of range.");
-        //return (data & (0xFF >> 8 * index)) << 
-        return 0;
-    }
 }
