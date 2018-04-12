@@ -2,6 +2,8 @@
 #include "mod/effect.hpp"
 #include "wordreader.hpp"
 
+#include <iostream>
+
 namespace
 {
     struct note
@@ -36,7 +38,7 @@ uint8_t NoteMixer::at(size_t index) const
     else // We need to look at where to jump to because we've been asked for a value
          // outside of the sample's actual indices.
     {
-        size_t idx = (m_jumpPosition + scaledIndex) % NoteMixer::size();
+        size_t idx = (scaledIndex % m_jumpPosition) + m_jumpPosition;
 
         return m_sample.sampleData[idx];
     }
