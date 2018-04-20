@@ -29,7 +29,7 @@ class NoteMixer
     // Query the size after scaling.
     size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
 
-    static NoteMixer Create(Sample& samp, uint32_t note);
+    static NoteMixer Create(Sample& samp, uint32_t data);
 
 };
 
