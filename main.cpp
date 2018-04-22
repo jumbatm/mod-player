@@ -33,7 +33,7 @@ int main(int argc, char** argv)
     std::ifstream file(argv[1], std::ios::binary);
     
     if (!file.is_open())
-    { 
+    {
         std::cout << "File not found!" << std::endl; 
         return FILE_NOT_FOUND;
     }
