@@ -41,7 +41,8 @@ if (BUILD_TESTS)
     enable_testing()
 
     add_executable(Test
-        tests/test.cpp
+        tests/main_test.cpp
+        tests/note_test.cpp
         )
 
     target_include_directories(Test
@@ -57,10 +58,13 @@ if (BUILD_TESTS)
     target_compile_options(Test
         PUBLIC
         -g
+        -Dprivate=public
+        -Wall
+        -Wextra
         )
 
     add_test(
         NAME Test
         COMMAND Test
-        )
+        ) 
 endif()
