@@ -23,5 +23,4 @@ TEST_CASE("Note extracts bits correctly")
     REQUIRE(n.m_period == 0x234);
     REQUIRE(n.m_effect == 0x6);
     REQUIRE(n.m_argument == 0x78);
-
 }

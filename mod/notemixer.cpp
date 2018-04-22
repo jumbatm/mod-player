@@ -1,14 +1,17 @@
 #include "mod/notemixer.hpp"
 #include "mod/note.hpp"
+#include "mod/song.hpp"
 
 #include "wordreader.hpp"
 
 #include <iostream>
 
-NoteMixer NoteMixer::Create(Sample& samp, uint32_t d)
+unsigned NoteMixer::playRate = 0;
+
+NoteMixer NoteMixer::Create(Song& from, uint32_t data)
 {
-    Note n(d);
-    return NoteMixer(samp, n.sampleRate());
+    Note n(data);
+    return NoteMixer(from.getInstrument(n.index()), n.sampleRate() / static_cast<double>(NoteMixer::playRate));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

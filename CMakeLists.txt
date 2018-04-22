@@ -26,7 +26,8 @@ target_compile_options(mplay
     PRIVATE
     -Wall
     -Wextra
-    -O2
+    #-O2
+    -g
     )
 
 find_library(PULSEAUDIO_SIMPLE_LOC pulse-simple)
