@@ -24,14 +24,14 @@ uint8_t NoteMixer::at(size_t index) const
 
     if (scaledIndex < NoteMixer::size())
     {
-        return m_sample.sampleData[scaledIndex];
+        return m_sample.sampleData.at(scaledIndex);
     }
     else // We need to look at where to jump to because we've been asked for a value
         // outside of the sample's actual indices.
     {
         size_t idx = (scaledIndex % m_jumpPosition) + m_jumpPosition;
 
-        return m_sample.sampleData[idx];
+        return m_sample.sampleData.at(idx);
     }
 }
 
