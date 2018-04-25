@@ -26,8 +26,7 @@ target_compile_options(mplay
     PRIVATE
     -Wall
     -Wextra
-    #-O2
-    -g
+    -Wpedantic
     )
 
 find_library(PULSEAUDIO_SIMPLE_LOC pulse-simple)
@@ -58,10 +57,10 @@ if (BUILD_TESTS)
 
     target_compile_options(Test
         PUBLIC
-        -g
         -Dprivate=public
         -Wall
         -Wextra
+        -Wpedantic
         )
 
     add_test(

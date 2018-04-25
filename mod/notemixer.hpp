@@ -7,10 +7,10 @@
 
 class NoteMixer
 {
-    const Sample& m_sample;          // The sample object we interpolate on.
-    size_t m_startOffset = 0;        // Where in the sample data should we start?
-    double m_scaleFactor = 1.0;      // How much are we warping its play speed by?
-    size_t m_jumpPosition = 0;       // Where to jump to when indexing to end of sample?
+    const Sample& m_sample;     // The sample object we interpolate on.
+    size_t m_startOffset = 0;   // Where in the sample data should we start?
+    double m_scaleFactor = 1.0; // How much are we warping its play speed by?
+    size_t m_jumpPosition = 0;  // Where to jump to when indexing to end of sample?
 
     size_t m_index = 0;
 
@@ -19,7 +19,7 @@ class NoteMixer
         m_sample(s),
         m_startOffset(startOffset),
         m_scaleFactor(scaleFactor),
-        m_jumpPosition(m_sample.repeatOffset / m_scaleFactor),
+        m_jumpPosition(m_sample.repeatOffset / (m_scaleFactor >= 1.0 ? m_scaleFactor : 1.0)),
         m_index(startOffset) 
     {
         if (NoteMixer::playRate == 0)
@@ -27,14 +27,20 @@ class NoteMixer
             throw std::runtime_error("No player rate set for NoteMixer! Did you forget to set NoteMixer::playRate");
         }
     }
+    
+    // This class provides an interface as if the sample data was an infinite
+    // array of values (with repeats of the jump position to the end). The below
+    // functions enable this.
 
-    // Return the sample at a certain index.
+    // Return the sample at a certain index, overlapping to the jump position if
+    // needed.
     uint8_t at(size_t index) const; // TODO: Consider templating this for the return type.
 
-    // Get the sample at the internal index and increment.
+    // Get the sample at the internal index (m_index) and increment it.
     uint8_t next();
 
-    // Query the size after scaling.
+    // Query the size after scaling. This is The size can't get larger, so disallow
+    // divisions less than 1.0.
     size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
 
     // Create NoteMixers based on the effect read.

@@ -126,14 +126,14 @@ Song::Song(const std::vector<uint8_t>& songData)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-constexpr unsigned SAMPLE_RATE = 16384;
+constexpr unsigned SAMPLE_RATE = 1000;
 
 void Song::play()
 {
     Sound::init(SAMPLE_RATE);
     NoteMixer::playRate = SAMPLE_RATE;
 
-    NoteMixer p(m_samples[4], 1 * (8192.0 / SAMPLE_RATE));
+    NoteMixer n(m_samples[4], 1 * (8192.0 / SAMPLE_RATE));
 
     std::vector<uint8_t> buffer(10);
 
