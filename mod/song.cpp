@@ -26,8 +26,7 @@ void _soft_assert(const char* filename, const unsigned line, bool condition)
 
 const static std::string fourThirtyOne(" M.K. M!K! FLT4 4CHN");
 const static std::string sixThirtyOne(" 6CHN");
-const static std::string eightThirtyOne(" 8CHN OCTA");
-
+const static std::string eightThirtyOne(" 8CHN OCTA"); 
 Song::Song(const std::vector<uint8_t>& songData)
 {
     // Use an iterator so that we don't have to continually keep track of where we are
@@ -104,8 +103,8 @@ Song::Song(const std::vector<uint8_t>& songData)
     cit += 4; 
 
     // Pattern and sample data. Usually less than 64, but can be up to 128.
-    size_t patternDataLength = (m_numChannels * /* Bytes per note:*/ 4 * sizeof(uint8_t) * /* Number of lines per pattern:*/ 64 * m_numPatterns);
-    m_patternData = std::vector<uint8_t>(cit, cit + patternDataLength);
+    size_t patternDataLength = (m_numChannels * /* 4 Bytes per note:*/ sizeof(uint32_t) * /* Number of lines per pattern:*/ 64 * m_numPatterns);
+    m_patternData = std::vector<uint32_t>(cit, cit + patternDataLength);
 
     // Move `cit` past all the pattern data.
     cit += patternDataLength;
@@ -127,13 +126,14 @@ Song::Song(const std::vector<uint8_t>& songData)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-constexpr unsigned SAMPLE_RATE = 8192;
+constexpr unsigned SAMPLE_RATE = 1000;
 
 void Song::play()
 {
     Sound::init(SAMPLE_RATE);
+    NoteMixer::playRate = SAMPLE_RATE;
 
-    NoteMixer p(m_samples[4]);
+    NoteMixer n(m_samples[4], 1 * (8192.0 / SAMPLE_RATE));
 
     std::vector<uint8_t> buffer(10);
 
@@ -141,7 +141,7 @@ void Song::play()
     {
         for (auto& bufsam : buffer)
         {
-            bufsam = p.next();
+            bufsam = n.next();
         }
         
         Sound::playRaw(&buffer[0], buffer.size());

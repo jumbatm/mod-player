@@ -31,9 +31,8 @@ class Song
     // How many patterns are stored in the MOD file?
     uint8_t m_numPatterns        = 0; 
 
-    // Where in the buffer do I find pattern data?
     // This is a copy of the pattern data.
-    std::vector<uint8_t> m_patternData;
+    std::vector<uint32_t> m_patternData;
 
     uint8_t m_songEndJumpPosition;
 
@@ -50,6 +49,11 @@ public:
     unsigned const& numInstruments() const
     {
         return m_numInstruments;
+    }
+
+    Sample& getInstrument(uint8_t index)
+    {
+        return m_samples.at(index);
     }
 
     // Manipulate sound data in some way.
