@@ -47,7 +47,7 @@ if (BUILD_TESTS)
 
     target_include_directories(Test
         PRIVATE
-        extern/catch-mini/
+        ./tests/catch-tiny/include/
         ./
         )
     target_link_libraries(Test
