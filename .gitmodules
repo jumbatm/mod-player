@@ -1,3 +1,6 @@
 [submodule "extern/catch-mini"]
 	path = extern/catch-mini
 	url = https://github.com/GValiente/catch-mini.git
+[submodule "tests/catch-tiny"]
+	path = tests/catch-tiny
+	url = https://www.github.com/jumbatm/catch-tiny.git
