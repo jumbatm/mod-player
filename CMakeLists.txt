@@ -5,6 +5,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(BUILD_TESTS "Build unit tests" ON)
+option(ENABLE_DEBUGGING "Enable debugging" ON)
+
+if (ENABLE_DEBUGGING)
+    set(MPLAY_DEBUG -DDEBUG)
+endif()
+
+message(${ENABLE_DEBUGGING})
 
 project(mplay VERSION 0.1
     LANGUAGES CXX)
@@ -27,6 +34,7 @@ target_compile_options(mplay
     -Wall
     -Wextra
     -Wpedantic
+    ${MPLAY_DEBUG}
     )
 
 find_library(PULSEAUDIO_SIMPLE_LOC pulse-simple)
@@ -61,6 +69,7 @@ if (BUILD_TESTS)
         -Wall
         -Wextra
         -Wpedantic
+        ${MPLAY_DEBUG}
         )
 
     add_test(

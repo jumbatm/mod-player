@@ -118,7 +118,7 @@ Song::Song(const std::vector<uint8_t>& songData)
         cit += sample.length; // Take advantage of information we already have.
     }
 
-    SOFT_ASSERT(cit == songData.end());
+    SOFT_ASSERT((std::cout << std::distance(cit, songData.cend()), cit == songData.end()));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ Song::Song(const std::vector<uint8_t>& songData)
 ////////////////////////////////////////////////////////////////////////////////
 
 
-constexpr unsigned SAMPLE_RATE = 1000;
+constexpr unsigned SAMPLE_RATE = 8192;
 
 void Song::play()
 {
@@ -149,3 +149,22 @@ void Song::play()
 
 }
 
+#ifdef DEBUG
+void Song::print()
+{
+#define NAME_AND_VALUE(VAR) #VAR << ": " << VAR << "[END]\n"
+    std::cout 
+        << NAME_AND_VALUE(m_name) 
+        << NAME_AND_VALUE(m_numChannels) 
+        << NAME_AND_VALUE(m_numInstruments) 
+        << NAME_AND_VALUE((int)m_numPatternsPlayed)
+        << NAME_AND_VALUE((int)m_numPatterns) 
+        << NAME_AND_VALUE((int)m_songEndJumpPosition);
+
+    for (Sample& samp : m_samples)
+    {
+        std::cout << samp.name << "[END]\n";
+    }
+#undef NAME_AND_VALUE
+}
+#endif // ifdef DEBUG

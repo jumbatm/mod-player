@@ -51,6 +51,10 @@ int main(int argc, char** argv)
     // Construct a new song object from this data.
     Song song(songData);
 
+#ifdef DEBUG
+    song.print();
+#endif
+
     // Convert the song data to unsigned 8 bit, because PulseAudio doesn't do
     // signed 8 bit natively.
     song.for_each_sound_sample<uint8_t>([](uint8_t& byte) 
