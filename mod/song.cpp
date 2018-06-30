@@ -133,7 +133,7 @@ void Song::play()
     Sound::init(SAMPLE_RATE);
     NoteMixer::playRate = SAMPLE_RATE;
 
-    NoteMixer n(m_samples[4], 1 * (8192.0 / SAMPLE_RATE));
+    NoteMixer n(m_samples[4], SAMPLE_RATE);
 
     std::vector<uint8_t> buffer(10);
 
@@ -148,6 +148,10 @@ void Song::play()
     }
 
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// Print function for debugging.
+////////////////////////////////////////////////////////////////////////////////
 
 #ifdef DEBUG
 void Song::print()
