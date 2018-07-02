@@ -54,7 +54,8 @@ public:
         return m_samples.at(index);
     }
 
-    // Manipulate sound data in some way.
+    // Manipulate sound data in some way.  Signature should match 
+    // void (*)(T& sample).
     template<typename T, typename Callable>
     void for_each_sound_sample(Callable&& f)
     {
