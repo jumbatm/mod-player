@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
 #include <valarray>
 #include <limits>
 
@@ -19,8 +17,26 @@ class Mixer
     // iterator support.
  
     public:
+    // A helper function to apply the formula described above. Automatically
+    // performs scaling to the maximum value ResultType can hold.
+    static ElementType mix(ElementType firstValue, ElementType secondValue)
+    {
+        // The "AB/256" from the formula above, for any type. Casted to avoid
+        // integer division.
+        double normaliser = firstValue * secondValue
+            / static_cast<double>(std::numeric_limits<ElementType>::max() + 1.0);
+
+        return firstValue + secondValue - normaliser;
+    }
+
     // Default construct.
     Mixer() : data()
+    {
+    }
+
+    // Construct from a valarray.
+    Mixer(std::valarray<ElementType>&& toOwn) 
+        : data(std::move(toOwn))
     {
     }
 
@@ -31,24 +47,14 @@ class Mixer
 
     Mixer<ElementType>& operator+(const std::valarray<ElementType>& other)
     {
+        // Unfortunately, valarray doesn't seem to provide a way to modify
+        // elements in-place. They have an `apply` method, but this, for all
+        // intents and purposes, generates a new valarray. Therefore, one of the
+        // tests for this class is to verify that this operator produces results
+        // identical to the one above.
         return Mixer{data + other - (data * other) 
             / static_cast<double>(std::numeric_limits<ElementType>::max())};
-        // See comment below.
     }
-
-    // A helper function to apply the formula described above. Automatically
-    // performs scaling to the maximum value ResultType can hold.
-    template <typename Type, typename ResultType = Type>
-    static ResultType mix(Type firstValue, Type secondValue)
-    {
-        // The "AB/256" from the formula above, for any type. Casted to avoid
-        // integer division.
-        double normaliser = firstValue * secondValue
-            / static_cast<double>(std::numeric_limits<ResultType>::max());
-
-        return firstValue + secondValue - normaliser;
-    }
-
 
     private:
     std::valarray<ElementType> data;
