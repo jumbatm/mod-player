@@ -56,7 +56,7 @@ public:
 
     // Manipulate sound data in some way.
     template<typename T, typename Callable>
-    void for_each_sound_sample(Callable f)
+    void for_each_sound_sample(Callable&& f)
     {
         for (Sample& s : m_samples)
         {
