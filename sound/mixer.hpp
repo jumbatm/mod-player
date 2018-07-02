@@ -1,22 +1,19 @@
 #pragma once
 
-#include <cstdint>
-#include <cstddef>
+#include <vector>
+#include <limits>
 
 namespace Mixer
 {
-    struct TrackInfo
+    template <typename ElementType>
+    ElementType mix(ElementType firstValue, ElementType secondValue)
     {
-        uint8_t const* data;
-        size_t const size;
-    };
+        // The "AB/256" from the formula above, for any type. Casted to avoid
+        // integer division.
+        double normaliser = firstValue * secondValue
+            / static_cast<double>(std::numeric_limits<ElementType>::max() + 1.0);
 
-    namespace helper
-    {
-        size_t scale(size_t index, double scalefactor);
+        return firstValue + secondValue - normaliser;
     }
 
-    void newTrack(unsigned sampleSize); // Initialise a new track.
-    void mixIn(size_t offset, const uint8_t *const track, size_t size, double scalefactor = 1.0); // Mix in new track.
-    TrackInfo getTrack();
-}
+} // end namespace Mixer::util

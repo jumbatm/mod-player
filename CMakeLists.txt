@@ -21,7 +21,6 @@ add_executable(mplay
     mod/notemixer.cpp
     mod/sample.cpp
     mod/song.cpp
-    sound/mixer.cpp
     sound/sound.cpp
     )
 
@@ -51,6 +50,7 @@ if (BUILD_TESTS)
     add_executable(Test
         tests/main_test.cpp
         tests/note_test.cpp
+        tests/mixer_test.cpp
         )
 
     target_include_directories(Test
