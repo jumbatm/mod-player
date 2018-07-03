@@ -38,7 +38,7 @@ int main(int argc, char** argv)
         return FILE_NOT_FOUND;
     }
 
-    // Read the data into a byte vector.
+    // Read the data into a byte vector. An instance of the most vexing parse.
     std::vector<uint8_t> songData(
             (std::istreambuf_iterator<char>(file)),
             (std::istreambuf_iterator<char>()));

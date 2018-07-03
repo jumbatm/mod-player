@@ -16,4 +16,4 @@ namespace Mixer
         return firstValue + secondValue - normaliser;
     }
 
-} // end namespace Mixer::util
+} // end namespace Mixer
