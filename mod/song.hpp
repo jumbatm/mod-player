@@ -49,7 +49,7 @@ public:
         return m_numInstruments;
     }
 
-    Sample& getInstrument(uint8_t index)
+    const Sample& getInstrument(uint8_t index) const
     {
         return m_samples.at(index);
     }

@@ -15,7 +15,7 @@ class NoteMixer
     size_t m_index = 0;
 
     public:
-    NoteMixer(Sample& s, double scaleFactor = 1.0, size_t startOffset = 0) : 
+    NoteMixer(const Sample& s, double scaleFactor = 1.0, size_t startOffset = 0) : 
         m_sample(s),
         m_startOffset(startOffset),
         m_scaleFactor(scaleFactor),
@@ -44,7 +44,7 @@ class NoteMixer
     size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
 
     // Create NoteMixers based on the effect read.
-    static NoteMixer Create(Song& from, uint32_t data);
+    static NoteMixer Create(const Song& from, uint32_t data);
     static unsigned playRate;     // What's our audio player's sample rate?
 
 };

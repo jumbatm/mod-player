@@ -8,7 +8,7 @@
 
 unsigned NoteMixer::playRate = 0;
 
-NoteMixer NoteMixer::Create(Song& from, uint32_t data)
+NoteMixer NoteMixer::Create(const Song& from, uint32_t data)
 {
     Note n(data);
     return NoteMixer(from.getInstrument(n.index()), n.sampleRate() / static_cast<double>(NoteMixer::playRate));
