@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <stdexcept>
+#include <cmath>
 
 #include "mod/song.hpp"
 #include "mod/sample.hpp"
@@ -41,7 +42,7 @@ class NoteMixer
 
     // Query the size after scaling. This is The size can't get larger, so disallow
     // divisions less than 1.0.
-    size_t size() const { return m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0); }
+    size_t size() const { return ::ceil(m_sample.sampleData.size() / (m_scaleFactor > 1.0 ? m_scaleFactor : 1.0)); }
 
     // Create NoteMixers based on the effect read.
     static NoteMixer Create(const Song& from, uint32_t data);
