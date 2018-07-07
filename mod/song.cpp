@@ -133,7 +133,7 @@ void Song::play()
     Sound::init(SAMPLE_RATE);
     NoteMixer::playRate = SAMPLE_RATE;
 
-    NoteMixer n(m_samples[4], SAMPLE_RATE);
+    NoteMixer n(m_samples[0]);
 
     std::vector<uint8_t> buffer(10);
 
