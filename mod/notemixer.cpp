@@ -29,9 +29,11 @@ uint8_t NoteMixer::at(size_t index) const
     else // We need to look at where to jump to because we've been asked for a value
         // outside of the sample's actual indices.
     {
+        if (m_sample.repeatLength <= 2) return 0;
+
         size_t limit = NoteMixer::size() - m_jumpPosition;
         size_t overEnd = scaledIndex - NoteMixer::size();
-        size_t idx = m_jumpPosition + (overEnd % limit);
+        size_t idx = m_jumpPosition + (overEnd % (limit ? limit : 1));
 
         return m_sample.sampleData.at(idx);
     }
