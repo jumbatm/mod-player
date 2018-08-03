@@ -12,7 +12,7 @@ TEST_CASE("Note extracts bits correctly")
     // Sample number:  wy
     // Sample period: Xxx
     // Effect       :   Z
-    // Argument     :  zz 
+    // Argument     :  zz
 
     uint32_t num{(BYTE_ORDER == BIG_ENDIAN) ? 0x12345678 : 0x78563412};
     // So that the first byte is always 0x12, next byte is always 0x34, etc.
